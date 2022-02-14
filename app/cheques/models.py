@@ -56,16 +56,8 @@ class Cheque(models.Model):
     def get_absolute_url(self):
         return reverse("cheques:detail", kwargs={"pk": self.pk})
     
-    def mark_as_printed(self, *args, **kwargs):
-        if self.is_printed == False:
-            self.is_printed = True
-        super(Cheque, self).save(*args, **kwargs)
-        return redirect("/")
-
-    # def mark_as_printed(self):
-    #     if self.is_printed == False:
-    #         return self.is_printed == True
-    #     return self.is_printed
+    # def mark_as_printed_url(self):
+    #     return reverse("cheques:mark-printed", kwargs={"pk": self.pk})
 
     def __str__(self):
         return self.vendor + " - " + self.payment_method + " - $" + str(self.amount)

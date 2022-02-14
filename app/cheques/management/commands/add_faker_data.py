@@ -27,7 +27,7 @@ class Command(BaseCommand):
     help = "Add faker data to the database"
 
     def handle(self, *args, **kwargs):
-        # fake = Faker()
+        fake = Faker()
         
         # for _ in range(10):
         #     company = fake.company().upper()[:8]

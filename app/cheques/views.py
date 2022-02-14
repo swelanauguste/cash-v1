@@ -6,13 +6,19 @@ from django.views.generic import (
     DetailView,
 )
 from hitcount.views import HitCountDetailView, HitCountMixin
-from django.shortcuts import render, get_list_or_404
+from django.shortcuts import render, get_list_or_404, redirect
 from .models import Cheque, ChequeComment
 
 
 class ChequeCreateView(CreateView):
     model = Cheque
     fields = ["vendor", "payment_method", "amount", "note"]
+    success_url = "new"
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        form.instance.updated_by = self.request.user
+        return super().form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
         context = super(ChequeCreateView, self).get_context_data(*args, **kwargs)
@@ -24,6 +30,9 @@ class ChequeCreateView(CreateView):
         context["cheques_printed"] = (
             Cheque.objects.filter(is_deleted=False)
             .filter(is_printed=True)
+            .filter(is_delivered=False)
+            .filter(is_processing=True)
+            .filter(is_cancelled=False)
             .order_by("-updated")
         )
         return context
@@ -39,14 +48,16 @@ class ChequeListView(HitCountMixin, ListView):
         return queryset
 
 
-class ChequeUpdateView(UpdateView):
-    model = Cheque
-    fields = ["vendor", "payment_method", "amount", "note"]
+def mark_as_printed(request, pk):
+    cheque = Cheque.objects.get(pk=pk)
+    cheque.is_printed = True
+    cheque.save()
+    return redirect("cheques:list")
 
 
 class ChequeDeleteView(DeleteView):
     model = Cheque
-    success_url = "/cheques/"
+    success_url = "cheques:list"
 
 
 class ChequeDetailView(HitCountDetailView):
