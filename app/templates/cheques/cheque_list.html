@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block head_title %}
+Cheques -
+{% endblock head_title %}
+
+
+{% block content %}
+<h1>Cheques</h1>
+<div class="col-8 mx-auto">
+    <div class="container my-5 text-end">
+        <a title="add cheque" class="fs-3 text-dark" href="{% url 'cheques:create' %}"><i
+                class="bi bi-plus-circle"></i></a>
+    </div>
+    <table class="table table-hover table-sm"
+        style="font-size: small;">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Vendor</th>
+                <th scope="col">Method</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Created at</th>
+                <th scope="col">Created by</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for cheque in object_list %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{cheque.vendor}}</td>
+                <td>{{cheque.payment_method}}</td>
+                <td>${{cheque.amount|intcomma}}</td>
+                <td class="text-muted">{{cheque.created|naturaltime}}</td>
+                <td>{{cheque.created_by}}</td>
+                <td class="py-0">
+                    <a title="details"
+                        href="{{ cheque.get_absolute_url }}"
+                        class="text-info fs-5"><i
+                            class="bi bi-info-circle"></i></a>
+                    <a title="mark as printed"
+                        href="{{ cheque.mark_as_printed }}"
+                        class="text-success fs-5 mx-1"><i
+                            class="bi bi-printer"></i></a>
+                  
+                </td>
+            </tr>
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
