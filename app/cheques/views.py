@@ -31,7 +31,7 @@ class ChequeCreateView(CreateView):
             Cheque.objects.filter(is_deleted=False)
             .filter(is_printed=True)
             .filter(is_delivered=False)
-            .filter(is_processing=True)
+            .filter(is_processing=False)
             .filter(is_cancelled=False)
             .order_by("-updated")
         )
@@ -51,6 +51,10 @@ class ChequeListView(HitCountMixin, ListView):
 def mark_as_printed(request, pk):
     cheque = Cheque.objects.get(pk=pk)
     cheque.is_printed = True
+    cheque.is_processing = False
+    cheque.is_cancelled = False
+    cheque.is_deleted = False
+    cheque.is_delivered = False
     cheque.save()
     return redirect("cheques:list")
 
