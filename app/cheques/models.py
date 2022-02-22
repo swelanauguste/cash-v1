@@ -51,7 +51,7 @@ class Cheque(models.Model):
     cheque_objects = ChequeManager()
 
     class Meta:
-        ordering = ["-created"]
+        ordering = ["amount"]
 
     def get_absolute_url(self):
         return reverse("cheques:detail", kwargs={"pk": self.pk})

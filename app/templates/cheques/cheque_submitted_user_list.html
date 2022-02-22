@@ -1,33 +1,32 @@
 {% load humanize %}
 
 <div class="shadow p-5">
-  <h1 class="text-center">Submitted</h1>
-  <hr>
-  <br>
+  <h1 class="text-center">Submitted ({{ cheques_created_by_user.count }})</h1>
+  <hr />
+  <br />
 
-    <table class="table table-hover table-sm"
-        style="font-size: small;">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Vendor</th>
-                <th scope="col">Amount</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            {% for cheque in cheques_created_by_user %}
-            <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{cheque.vendor}}</td>
-                <td>${{cheque.amount|intcomma}}</td>
-                <td>
-                    <a title="edit" class="text-warning fs-5" href=""><i class="bi bi-pencil"></i></a>
-                </td>
-            </tr>
-            {% endfor %}
-
-
-        </tbody>
-    </table>
+  <table class="table table-hover table-sm"
+    style="font-size: small">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Vendor</th>
+        <th scope="col">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cheque in cheques_created_by_user %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{cheque.vendor}}</td>
+        <td>${{cheque.amount|intcomma}}</td>
+        <td>
+          <a title="edit"
+            class="text-warning fs-5"
+            href=""><i class="bi bi-pencil"></i></a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
